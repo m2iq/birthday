@@ -25,6 +25,7 @@ import {
   supabaseConfigured,
 } from "@/lib/storage";
 import HeartQR from "@/components/HeartQR";
+import TikTokFollowGate from "@/components/TikTokFollowGate";
 
 const COLOR_PRESETS = [
   { label: "Rose", value: "#ff2d75" },
@@ -423,75 +424,77 @@ export default function CreatorPage() {
 
           {/* Step 3: Preview & Publish */}
           {step === 3 && (
-            <motion.div
-              key="step3"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              className="space-y-6"
-            >
-              {/* Summary card */}
-              <div
-                className="rounded-xl p-6 border"
-                style={{
-                  borderColor: `${config.themeColor}33`,
-                  background: `linear-gradient(145deg, ${config.themeColor}08, transparent)`,
-                }}
+            <TikTokFollowGate>
+              <motion.div
+                key="step3"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                className="space-y-6"
               >
-                <h3 className="text-lg font-semibold mb-4" dir="rtl">
-                  ملخص الإعدادات
-                </h3>
-                <div className="space-y-3 text-sm text-white/70" dir="rtl">
-                  <div className="flex justify-between">
-                    <span>الاسم:</span>
-                    <span className="text-white">{config.name}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>كلمات التهنئة:</span>
-                    <span className="text-white">
-                      {config.messageWords.join(" ")}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>عدد الصور:</span>
-                    <span className="text-white">{config.photos.length}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span>اللون:</span>
-                    <div
-                      className="w-6 h-6 rounded-full"
-                      style={{ backgroundColor: config.themeColor }}
-                    />
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span>موسيقى:</span>
-                    <span className="text-white">
-                      {config.musicUrl ? <CheckCircle className="w-4 h-4 text-green-400" /> : <X className="w-4 h-4 text-white/30" />}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex gap-3">
-                <button
-                  onClick={handlePreview}
-                  className="flex-1 py-3 rounded-lg border border-white/20 text-white/70 hover:text-white hover:bg-white/5 transition-all text-sm font-arabic flex items-center justify-center gap-2"
-                >
-                  <Eye className="w-4 h-4" /> معاينة
-                </button>
-                <button
-                  onClick={handleGenerate}
-                  disabled={isGenerating}
-                  className="flex-1 py-3 rounded-lg font-semibold text-white transition-all text-sm disabled:opacity-50 font-arabic flex items-center justify-center gap-2"
+                {/* Summary card */}
+                <div
+                  className="rounded-xl p-6 border"
                   style={{
-                    backgroundColor: config.themeColor,
-                    boxShadow: `0 0 30px ${config.themeColor}44`,
+                    borderColor: `${config.themeColor}33`,
+                    background: `linear-gradient(145deg, ${config.themeColor}08, transparent)`,
                   }}
                 >
-                  {isGenerating ? "جاري الإنشاء..." : <><Rocket className="w-4 h-4" /> إنشاء الرابط</>}
-                </button>
-              </div>
-            </motion.div>
+                  <h3 className="text-lg font-semibold mb-4" dir="rtl">
+                    ملخص الإعدادات
+                  </h3>
+                  <div className="space-y-3 text-sm text-white/70" dir="rtl">
+                    <div className="flex justify-between">
+                      <span>الاسم:</span>
+                      <span className="text-white">{config.name}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>كلمات التهنئة:</span>
+                      <span className="text-white">
+                        {config.messageWords.join(" ")}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>عدد الصور:</span>
+                      <span className="text-white">{config.photos.length}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span>اللون:</span>
+                      <div
+                        className="w-6 h-6 rounded-full"
+                        style={{ backgroundColor: config.themeColor }}
+                      />
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span>موسيقى:</span>
+                      <span className="text-white">
+                        {config.musicUrl ? <CheckCircle className="w-4 h-4 text-green-400" /> : <X className="w-4 h-4 text-white/30" />}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <button
+                    onClick={handlePreview}
+                    className="flex-1 py-3 rounded-lg border border-white/20 text-white/70 hover:text-white hover:bg-white/5 transition-all text-sm font-arabic flex items-center justify-center gap-2"
+                  >
+                    <Eye className="w-4 h-4" /> معاينة
+                  </button>
+                  <button
+                    onClick={handleGenerate}
+                    disabled={isGenerating}
+                    className="flex-1 py-3 rounded-lg font-semibold text-white transition-all text-sm disabled:opacity-50 font-arabic flex items-center justify-center gap-2"
+                    style={{
+                      backgroundColor: config.themeColor,
+                      boxShadow: `0 0 30px ${config.themeColor}44`,
+                    }}
+                  >
+                    {isGenerating ? "جاري الإنشاء..." : <><Rocket className="w-4 h-4" /> إنشاء الرابط</>}
+                  </button>
+                </div>
+              </motion.div>
+            </TikTokFollowGate>
           )}
         </AnimatePresence>
       </div>
@@ -566,53 +569,55 @@ export default function CreatorPage() {
                 </p>
               </div>
 
-              {/* Heart QR Code */}
-              <div className="flex justify-center mb-5">
-                <HeartQR
-                  url={shareModal.url}
-                  color={config.themeColor}
-                  size={220}
-                />
-              </div>
-
-              {/* URL display + copy */}
-              <div className="flex items-center gap-2 mb-4">
-                <div
-                  className="flex-1 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white/70 text-xs truncate"
-                  dir="ltr"
-                >
-                  {shareModal.url}
+              <div>
+                {/* Heart QR Code */}
+                <div className="flex justify-center mb-5">
+                  <HeartQR
+                    url={shareModal.url}
+                    color={config.themeColor}
+                    size={220}
+                  />
                 </div>
-                <button
-                  onClick={handleCopyLink}
-                  className="flex items-center gap-1 px-3 py-2 rounded-lg text-white text-xs font-medium transition-all"
-                  style={{ backgroundColor: config.themeColor }}
-                >
-                  {copied ? (
-                    <>
-                      <Check className="w-3.5 h-3.5" /> تم
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="w-3.5 h-3.5" /> نسخ
-                    </>
-                  )}
-                </button>
-              </div>
 
-              {/* Open link */}
-              <a
-                href={shareModal.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block w-full py-3 rounded-lg text-center font-medium text-white text-sm font-arabic transition-all"
-                style={{
-                  backgroundColor: config.themeColor,
-                  boxShadow: `0 0 20px ${config.themeColor}33`,
-                }}
-              >
-                فتح التجربة
-              </a>
+                {/* URL display + copy */}
+                <div className="flex items-center gap-2 mb-4">
+                  <div
+                    className="flex-1 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white/70 text-xs truncate"
+                    dir="ltr"
+                  >
+                    {shareModal.url}
+                  </div>
+                  <button
+                    onClick={handleCopyLink}
+                    className="flex items-center gap-1 px-3 py-2 rounded-lg text-white text-xs font-medium transition-all"
+                    style={{ backgroundColor: config.themeColor }}
+                  >
+                    {copied ? (
+                      <>
+                        <Check className="w-3.5 h-3.5" /> تم
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5" /> نسخ
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                {/* Open link */}
+                <a
+                  href={shareModal.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block w-full py-3 rounded-lg text-center font-medium text-white text-sm font-arabic transition-all"
+                  style={{
+                    backgroundColor: config.themeColor,
+                    boxShadow: `0 0 20px ${config.themeColor}33`,
+                  }}
+                >
+                  فتح التجربة
+                </a>
+              </div>
             </motion.div>
           </motion.div>
         )}

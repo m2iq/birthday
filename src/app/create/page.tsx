@@ -81,6 +81,7 @@ export default function CreatorPage() {
     url: string;
     id: string;
   } | null>(null);
+  const [generateError, setGenerateError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const musicRef = useRef<HTMLInputElement>(null);
@@ -112,6 +113,7 @@ export default function CreatorPage() {
 
   const handleGenerate = async () => {
     setIsGenerating(true);
+    setGenerateError(null);
     const id = uuidv4().slice(0, 8);
     const finalConfig = { ...config, id, createdAt: Date.now() };
 
@@ -119,12 +121,22 @@ export default function CreatorPage() {
     saveBirthdayConfig(finalConfig);
 
     // Also save to Supabase if configured
-    if (supabaseConfigured) {
-      try {
-        await saveBirthdayConfigToSupabase(finalConfig);
-      } catch (err) {
-        console.warn("Supabase save failed, using localStorage only:", err);
-      }
+    if (!supabaseConfigured) {
+      setIsGenerating(false);
+      setGenerateError(
+        "Supabase غير مفعّل. تم الحفظ محلياً فقط، وسيعمل الرابط على هذا الجهاز فقط."
+      );
+      return;
+    }
+
+    try {
+      await saveBirthdayConfigToSupabase(finalConfig);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      console.error("Supabase save failed, using localStorage only:", err);
+      setIsGenerating(false);
+      setGenerateError(`فشل الحفظ في Supabase: ${message}`);
+      return;
     }
 
     const shareUrl = `${window.location.origin}/birthday/${id}`;
@@ -493,6 +505,15 @@ export default function CreatorPage() {
                     {isGenerating ? "جاري الإنشاء..." : <><Rocket className="w-4 h-4" /> إنشاء الرابط</>}
                   </button>
                 </div>
+
+                {generateError && (
+                  <div
+                    className="rounded-lg border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-100"
+                    dir="rtl"
+                  >
+                    {generateError}
+                  </div>
+                )}
               </motion.div>
             </TikTokFollowGate>
           )}

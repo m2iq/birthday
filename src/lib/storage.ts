@@ -74,7 +74,11 @@ async function uploadAsset(
   const { error } = await supabase.storage
     .from(bucket)
     .upload(path, blob, { upsert: true, contentType: blob.type });
-  if (error) throw error;
+  if (error) {
+    throw new Error(
+      `Storage upload failed (${bucket}/${path}): ${error.message}${error.statusCode ? ` [${error.statusCode}]` : ""}`
+    );
+  }
   const {
     data: { publicUrl },
   } = supabase.storage.from(bucket).getPublicUrl(path);
@@ -130,7 +134,11 @@ export async function saveBirthdayConfigToSupabase(
   const { error } = await supabase
     .from("birthday_configs")
     .upsert(row, { onConflict: "id" });
-  if (error) throw error;
+  if (error) {
+    throw new Error(
+      `DB upsert failed (birthday_configs): ${error.message}${error.code ? ` [${error.code}]` : ""}`
+    );
+  }
 
   // Return the config with URLs (instead of base64)
   return {

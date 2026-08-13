@@ -167,14 +167,33 @@ export default function MagicBook({
     // Don't auto-flip the first page — wait for user tap (which plays music)
     if (!bookOpened) return;
     if (currentPage >= totalPhysicalPages) return;
+
+    let duration = 6000;
+
+    // The currently visible sides are the back of the previous page (left) and the front of the current page (right)
+    const leftSide = currentPage > 0 ? sides[currentPage * 2 - 1] : null;
+    const rightSide = currentPage < totalPhysicalPages ? sides[currentPage * 2] : null;
+
+    let textLength = 0;
+    if (leftSide && leftSide.type === "text") {
+      textLength += leftSide.content.length;
+    }
+    if (rightSide && rightSide.type === "text") {
+      textLength += rightSide.content.length;
+    }
+
+    if (textLength > 0) {
+      duration = Math.max(5000, textLength * 100 + 2000);
+    }
+
     autoFlipRef.current = setTimeout(
       () => nextPageRef.current(),
-      4000
+      duration
     );
     return () => {
       if (autoFlipRef.current) clearTimeout(autoFlipRef.current);
     };
-  }, [currentPage, totalPhysicalPages, bookOpened]);
+  }, [currentPage, totalPhysicalPages, bookOpened, sides]);
 
   useEffect(() => {
     const h = (e: KeyboardEvent) => {
